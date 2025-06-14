@@ -1,0 +1,89 @@
+timestamp: 2025-06-13T17:23:23.167507
+CREATE TABLE "auth_user"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "username" CHAR(512) UNIQUE,
+    "email" CHAR(512) UNIQUE,
+    "password" CHAR(512),
+    "first_name" CHAR(512),
+    "last_name" CHAR(512),
+    "sso_id" CHAR(512),
+    "action_token" CHAR(512),
+    "last_password_change" TIMESTAMP,
+    "past_passwords_hash" TEXT
+);
+success!
+timestamp: 2025-06-13T17:23:23.174507
+CREATE TABLE "auth_user_tag_groups"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "tagpath" CHAR(512),
+    "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE ON UPDATE CASCADE  
+);
+success!
+timestamp: 2025-06-13T17:23:23.186508
+CREATE TABLE "ingredient"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "name" CHAR(512),
+    "unit" DOUBLE,
+    "calories_per_unit" DOUBLE,
+    "description" TEXT,
+    "total_fat" INTEGER,
+    "cholesterol" INTEGER,
+    "sodium" INTEGER,
+    "total_carbohydrate" INTEGER,
+    "protein" INTEGER
+);
+success!
+timestamp: 2025-06-13T17:23:23.191509
+CREATE TABLE "recipe"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "name" CHAR(512),
+    "type" TEXT,
+    "description" TEXT,
+    "author" CHAR(512),
+    "instruction_steps" TEXT,
+    "servings" INTEGER
+);
+success!
+timestamp: 2025-06-13T17:23:23.195508
+CREATE TABLE "link"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "recipe_id" INTEGER REFERENCES "recipe" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
+    "ingredient_id" INTEGER REFERENCES "ingredient" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
+    "quantity_per_serving" DOUBLE,
+    "unit" TEXT
+);
+success!
+timestamp: 2025-06-13T17:23:23.200509
+CREATE TABLE "recipe_image"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "recipe_id" INTEGER REFERENCES "recipe" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
+    "image" CHAR(512)
+);
+success!
+timestamp: 2025-06-13T17:23:23.204508
+CREATE TABLE "favorite"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
+    "recipe_id" INTEGER REFERENCES "recipe" ("id") ON DELETE CASCADE ON UPDATE CASCADE  
+);
+success!
+timestamp: 2025-06-13T17:23:23.209508
+CREATE TABLE "mealdb_data"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "recipe_id" INTEGER REFERENCES "recipe" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
+    "meal_id" CHAR(512),
+    "image_url" CHAR(512),
+    "video_url" CHAR(512),
+    "area" CHAR(512),
+    "category" CHAR(512)
+);
+success!
+timestamp: 2025-06-13T17:23:23.214507
+CREATE TABLE "user_profile"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "user_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE ON UPDATE CASCADE  ,
+    "name" TEXT,
+    "bio" TEXT,
+    "profile_picture" CHAR(512)
+);
+success!
